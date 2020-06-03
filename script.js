@@ -46,11 +46,19 @@ for (s in suits) {
 }
 
 function Start() {
-  shuffleDeck(cards);
-  console.log(cards);
-  dealNew();
-  document.getElementById('start').style.display = 'none';
-  dollarValue.innerHTML = mydollars;
+             var regex=/^[1-9]\d{0,2}$/;
+            var amount=document.getElementById("mybet").value;
+            if(regex.test(amount))
+            {
+                
+              shuffleDeck(cards);
+              dealNew();
+              document.getElementById('start').style.display = 'none';
+              dollarValue.innerHTML = mydollars;
+            }
+            else{
+               alert("Enter Valid Amount");
+            }
 }
 
 function dealNew() {
@@ -61,6 +69,8 @@ function dealNew() {
   playerHolder.innerHTML = "";
   var betvalue = document.getElementById('mybet').value;
   mydollars = mydollars - betvalue;
+  if(mydollars>-1)
+  {
   document.getElementById('dollars').innerHTML = mydollars;
   document.getElementById('myactions').style.display = 'block';
   message.innerHTML = "Get up to 21 and beat the dealer to win.<br>Current bet is $" + betvalue;
@@ -68,6 +78,12 @@ function dealNew() {
   document.getElementById('maxbet').disabled = true;
   deal();
   document.getElementById('btndeal').style.display = 'none';
+  }
+  else{
+    
+    alert("Out of Ca$h");
+    location.reload();
+  }
 }
 
 function redeal() {
@@ -82,7 +98,6 @@ function redeal() {
 
 function deal() {
   for (x = 0; x < 2; x++) {
-      //card count reshuffle
     dealerCard.push(cards[cardCount]);
     dealerHolder.innerHTML += cardOutput(cardCount, x);
     if (x == 0) {
@@ -101,9 +116,16 @@ function deal() {
 }
 
 function cardOutput(n, x) {
-  var hpos = (x > 0) ? x * 60 + 100 : 100;
-  return '<div class="icard ' + cards[n].icon + '" style="left:' + hpos + 'px;">  <div class="top-card suit">' + cards[n].cardnum + '<br></div>  <div class="content-card suit"></div>  <div class="bottom-card suit">' + cards[n].cardnum +
+  if(hpos = (x > 0)){ 
+    hpos =  x * 60 + 100;
+    return '<div class="icard ' + cards[n].icon + '" style=" left:' + hpos + 'px; transform: rotate(8deg);">  <div class="top-card suit">' + cards[n].cardnum + '<br></div>  <div class="content-card suit"></div>  <div class="bottom-card suit">' + cards[n].cardnum +
     '<br></div> </div>';
+  } else{
+    hpos = 100
+    return '<div class="icard ' + cards[n].icon + '" style="left:' + hpos + 'px; ">  <div class="top-card suit">' + cards[n].cardnum + '<br></div>  <div class="content-card suit"></div>  <div class="bottom-card suit">' + cards[n].cardnum +
+    '<br></div> </div>';
+  };
+  
 }
 
 function maxbet() {
@@ -177,6 +199,7 @@ function playend() {
   if (playervalue == 21 && playerCard.length == 2) {
     message.innerHTML = "Player Blackjack";
     payoutJack = 1.5;
+    playend();
   }
 
   var betvalue = parseInt(document.getElementById('mybet').value) * payoutJack;
