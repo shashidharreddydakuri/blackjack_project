@@ -24,6 +24,7 @@ document.getElementById('mybet').onchange = function() {
   if (this.value > mydollars) {
     this.value = mydollars;
   }
+
   message.innerHTML = "Bet changed to $" + this.value;
 }
 
